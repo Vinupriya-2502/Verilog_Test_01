@@ -1,28 +1,27 @@
-module dff_mux_tb;
-  reg reset,d,clock;
+module dff_rst_tb;
+  reg reset,d,clk;
   wire q;
-  dff_mux dut(reset,d,clock,q);
+  dff_rst dut(reset,d,clk,q);
   initial
   begin
-    $dumpfile("dump.vcd");
-    $dumpvars;
+    $dumpfile("r_dff.vcd");
+    $dumpvars(1,dff_r_tb);
   end
-  always #5 clock=~clock;
+  always #5 clk=~clk;
    
   initial
     begin
-    clock=0;
-    reset=0;
-    #5;
-    reset=1;
-  end
+    clk=0;reset=0;
+  #5reset=1;
+    end
   
   initial
   begin
+    $monitor("Time=%t,d=%b,q=%b",$time,d,q);
     d=0;
-    #10 d=1;
-    #10 d=0;
-    #10 d=1;
+    #3 d=1;
+    #6 d=0;
+    #9 d=1;
     #100 $finish;
   end
 endmodule
