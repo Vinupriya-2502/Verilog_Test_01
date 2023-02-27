@@ -1,4 +1,4 @@
-module seq_110011_moore(
+module seq_detector(
 input x,clk,reset,
 output reg z
 );
@@ -17,34 +17,34 @@ always @(PS, x)
 begin          
 case(PS)
             S0 : begin
-                        NS = x ? S1 : S0 ;
+                        NS <= x ? S1 : S0 ;
                         $display(PS);
                     end
             S1 : begin 
-                        NS = x ? S2 : S0 ;
+                        NS <= x ? S2 : S0 ;
                         $display(PS);
                     end
             S2 : begin 
-                        NS = x ? S2 : S3 ;
+                        NS <= x ? S2 : S3 ;
                         $display(PS);
                     end 
             S3 : begin 
-                        NS = x ? S3 : S4 ;
+                        NS <= x ? S3 : S4 ;
                         $display(PS);
                     end
             S4 : begin 
-                        NS = x ? S5 : S0 ;
+                        NS <= x ? S5 : S0 ;
                         $display(PS);
                     end
 	     S5 : begin 
-                        NS = x ? S6 : S4 ;
+                        NS <= x ? S6 : S4 ;
                         $display(PS);
                     end
              S6 : begin 
-                        NS = x ? S2 : S4 ;
+                        NS <= x ? S2 : S4 ;
                         $display(PS);
                     end	
-            default: NS = S0; 
+            default: NS <= S0; 
         endcase
     end
 always @(PS)
