@@ -1,4 +1,4 @@
-module seq_detector(
+module seq_110011_moore(
 input x,clk,reset,
 output reg z
 );
