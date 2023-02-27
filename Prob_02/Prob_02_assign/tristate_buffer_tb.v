@@ -1,17 +1,17 @@
 module buffertb;
 	reg d;
-  reg en;
+        reg enable;
 	wire y;
-	buffer_assign uut(d,en,y);
+	tristate_buffer uut(d,enable,y);
 	initial
 	begin
-		en = 1;
+		enable = 1;
 		d = 0; # 10; 
 		if ( y == 0 ) 
 			$display ("Pass %d %d",d,y);
 		else
 			$display ("Fail %d %d",d,y);
-		en = 1;
+		enable = 1;
 		d = 1; # 10; 
 		if ( y == 1 ) 
 			$display ("Pass %d %d",d,y);
