@@ -1,8 +1,8 @@
-module buffertb;
+module tri_buffer_tb;
 	reg d;
   reg en;
 	wire y;
-	buffer_g uut(d,en,y);
+	tri_buffer uut(d,en,y);
 	initial
 	begin
                 #5
