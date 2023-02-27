@@ -1,32 +1,39 @@
-module sync_fifo(DATAOUT, full, empty, clock, reset, wn, rn, DATAIN);
-  output reg [31:0] DATAOUT;
-  output full, empty;
-  input [31:0] DATAIN;
-  input clock, reset, wn, rn; 
+module sync_fifo (
+  input clk, rst,
+  input we, re,
+  input [31:0] DATAIN,
+  output reg [31:0] DATAOUT,
+  output full,
+  output empty
+);
   
-  reg [1023:0] wptr, rptr; 
-  reg [1023:0] memory [7:0]; 
+  reg [1023:0] wptr, rptr;
+  reg [31:0] mem[1023:0];
   
-  assign full = ( (wptr == 3'b111) & (rptr == 3'b000) ? 1 : 0 );
-  assign empty = (wptr == rptr) ? 1 : 0;
-  
-  always @(posedge clock)
-  begin
-    if (reset)
-      begin
-        memory[0] <= 0; memory[1] <= 0; memory[2] <= 0; memory[3] <= 0;
-        memory[4] <= 0; memory[5] <= 0; memory[6] <= 0; memory[7] <= 0;
-        DATAOUT <= 0; wptr <= 0; rptr <= 0;
-      end
-    else if (wn & !full)
-      begin
-        memory[wptr] <= DATAIN;
-        wptr <= wptr + 1;
-      end
-    else if (rn & !empty)
-      begin
-        DATAOUT <= memory[rptr];
-        rptr <= rptr + 1;
-      end
+  always @(posedge clk) begin
+    if (rst) begin
+      wptr <= 0;
+      rptr <= 0;
+      DATAOUT <= 0;
+    end
   end
+  
+  always @(posedge clk) begin
+    if (we & !full) begin
+      mem[wptr] <= DATAIN;
+      wptr <= wptr + 1;
+    end
+  end
+  
+  always @(posedge clk) begin
+    if (re & !empty) begin
+      DATAOUT <= mem[rptr];
+      rptr <= rptr + 1;
+    end
+  end
+  
+  assign full = ({~wptr[1023], wptr[1022:0]} == rptr[1022:0]);
+  assign empty = (wptr == rptr);
+  
 endmodule
+
